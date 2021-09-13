@@ -33,16 +33,13 @@ public class ftpConnection {
 	}
 	
 	public void Connect() throws Exception {
-		this.Client.setCharset(Charset.forName("UTF-8"));
-		this.Client.setConnectTimeout(5000);
 		this.Client.connect(this.ServerIp, this.port);
 		this.Client.login(this.User, this.Pass);
-		this.Client.setKeepAlive(true);
 		this.Client.enterLocalPassiveMode();
 		this.Client.setFileType(FTP.BINARY_FILE_TYPE);
+		this.Client.setKeepAlive(true);
 		thread = new ClientThread(this.Client);
-		thread.setPriority(Thread.MIN_PRIORITY);
-		thread.run();
+
 	}
 	
 	public FTPClient getClient() {
@@ -62,7 +59,7 @@ public class ftpConnection {
 		}
 	}
 	
-	class ClientThread extends Thread{
+	class ClientThread {
 		
 		public FTPClient client;
 		public List<FileModif> pending = new ArrayList<FileModif>();
@@ -84,11 +81,7 @@ public class ftpConnection {
 			
 		}
 		
-		@Override
-		public void run() {
-			
-		}
-		
+
 		private void sendFile() {
 			try {
 				File firstLocalFile = pending.get(0).f;
@@ -97,13 +90,17 @@ public class ftpConnection {
 	            InputStream inputStream;
 				inputStream = new FileInputStream(firstLocalFile);
 	
-	 
+				System.out.println(firstRemoteFile);
+				System.out.println(firstLocalFile.getAbsolutePath());
 	            boolean done = this.client.storeFile(firstRemoteFile, inputStream);
 	            inputStream.close();
 	            if (done) {
 	                System.out.println("The first file is uploaded successfully.");
 	            } else {
-	            	System.out.println("NOPËE");
+	            	System.out.println("NOPE");
+	            }
+	            for(String e:this.client.getReplyStrings()) {
+	            	System.out.println(e);
 	            }
 	            pending.remove(0);
 				if(!pending.isEmpty()) {
