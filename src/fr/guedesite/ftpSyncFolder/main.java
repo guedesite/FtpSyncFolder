@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class main {
 
-	public String[] ignore = {".settings",".buildpath",".project","bdd","license","readme",".git",".github"};
+	public String[] ignore = {".settings",".buildpath",".project","bdd","license","readme",".git",".github",".",".."};
 	public ftpConnection Connection;
 	public GuiSelect Gui;
 	
@@ -28,10 +28,12 @@ public class main {
 
 	
 	public boolean initConnection(String ip, String user, String pass) {
+		Gui.setText("Connecting");
 		Connection = new ftpConnection(ip, user, pass);
 		try  {
 			
 			Connection.Connect();
+			Gui.setText("success");
 			return true;
 		}  catch(Exception e) {
 			e.printStackTrace();
@@ -40,6 +42,7 @@ public class main {
 	}
 	
 	public boolean initFile(File f) {
+		Gui.setText("Start listing files");
 		if(f.isDirectory()) {
 			int i = 0;
 			i = loopInitFile(f,i);
@@ -49,6 +52,7 @@ public class main {
 			
 			loopInitFile(f,0);
 			Stream = () -> Arrays.stream(allFile);
+			Gui.setText("List "+i+" Files");
 			
 			return true;
 		}
@@ -72,7 +76,7 @@ public class main {
 			boolean flag = false;
 			
 			for(String ig : ignore) {
-				if(f1.getName().toLowerCase().startsWith(ig)) {
+				if(f1.getName().toLowerCase() == ig) {
 					flag = true;
 					break;
 				}

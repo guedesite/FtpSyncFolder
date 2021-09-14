@@ -113,8 +113,6 @@ public class GuiSelect {
 				if(f != null && main.Instance.initConnection(ip.getText(), user.getText(), pass.getText()) && main.Instance.initFile(f)) {
 					main.Instance.start();
 					text.setText("Working");
-					Frame.setVisible(false);
-					reload();
 				}else {
 					text.setText("Error");
 				}
@@ -126,6 +124,10 @@ public class GuiSelect {
 		 reload();
 		
 		
+	}
+	
+	public void setText(String q) {
+		this.text.setText(q);
 	}
 	
 	public void reload() {
