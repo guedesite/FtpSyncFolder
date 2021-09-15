@@ -1,6 +1,7 @@
 package fr.guedesite.ftpSyncFolder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ public class main {
 	private Supplier<Stream<FileModif>> Stream;
 	
 	public static main Instance;
+	
+	private File base;
 	
 	public static void main(String[] args) {
 		Instance = new main();
@@ -44,6 +47,7 @@ public class main {
 	public boolean initFile(File f) {
 		Gui.setText("Start listing files");
 		if(f.isDirectory()) {
+			base = f;
 			int i = 0;
 			i = loopInitFile(f,i);
 			allFile = new FileModif[i];
@@ -86,6 +90,7 @@ public class main {
 			}
 			
 			
+			
 			if(allFile != null) {
 				allFile[i]=new FileModif(f1);
 			}
@@ -97,7 +102,11 @@ public class main {
 		return i;
 	}
 	
-	public class FileModif {
+	public File getBase() {
+		return this.base;
+	}
+	
+	public static class FileModif {
 		public File f;
 		public long last;
 		public FileModif(File f2) {
