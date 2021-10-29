@@ -20,6 +20,8 @@ public class main {
 	
 	private File base;
 	
+	private checkSend checkSend;
+	
 	public static void main(String[] args) {
 		Instance = new main();
 	}
@@ -64,17 +66,10 @@ public class main {
 	}
 	
 	public void start() {
-		long time = System.currentTimeMillis();
-		Connection.addFile(Stream.get().filter(x -> x.hasChange()).collect(Collectors.toList()));
-		System.out.println((System.currentTimeMillis() - time) +"ms");
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		start();
+		this.checkSend = new checkSend();
+		this.checkSend.start();
 	}
+	
 	private int loopInitFile(File f, int i) {
 		for(File f1: f.listFiles()) {
 			boolean flag = false;
@@ -101,7 +96,21 @@ public class main {
 		}
 		return i;
 	}
-	
+	class checkSend extends Thread {
+		@Override
+		public void run() {
+			long time = System.currentTimeMillis();
+			Connection.addFile(Stream.get().filter(x -> x.hasChange()).collect(Collectors.toList()));
+			System.out.println((System.currentTimeMillis() - time) +"ms");
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			run();
+		}
+	}
 	public File getBase() {
 		return this.base;
 	}

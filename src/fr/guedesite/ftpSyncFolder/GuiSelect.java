@@ -1,7 +1,6 @@
 package fr.guedesite.ftpSyncFolder;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -10,10 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.filechooser.FileFilter;
 
 public class GuiSelect {
 
@@ -27,6 +23,8 @@ public class GuiSelect {
 	public JTextField text;
 	
 	private File f;
+	
+	private SaveOption save = new SaveOption();
 	
 	public GuiSelect() {
 		Frame = new JFrame();
@@ -64,24 +62,28 @@ public class GuiSelect {
 		 ip.setBounds(22, 60, 240, 30);
 		 ip.replaceSelection("Host Ip");
 		 ip.setHorizontalAlignment(JTextField.CENTER);
+		 ip.setText(save.ip);
 		 Panel.add(ip);
 		 
 		 user = new JTextField();
 		 user.setBounds(22, 110, 240, 30);
 		 user.replaceSelection("User");
 		 user.setHorizontalAlignment(JTextField.CENTER);
+		 user.setText(save.User);
 		 Panel.add(user);
 		 
 		 pass = new JTextField();
 		 pass.setBounds(22, 160, 240, 30);
 		 pass.replaceSelection("Password");
 		 pass.setHorizontalAlignment(JTextField.CENTER);
+		 pass.setText(save.pass);
 		 Panel.add(pass);
 		 
 		 file = new JFileChooser();
 		 file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		 file.setAcceptAllFileFilterUsed(false);
 		 
+		 f = save.folder;
 		 
 		 btnFile = new JButton("Choose Folder");
 		 btnFile.setBounds(22, 210, 240, 30);
@@ -111,6 +113,7 @@ public class GuiSelect {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(f != null && main.Instance.initConnection(ip.getText(), user.getText(), pass.getText()) && main.Instance.initFile(f)) {
+					save.save(ip.getText(), user.getText(), pass.getText(), f);
 					main.Instance.start();
 					text.setText("Working");
 				}else {

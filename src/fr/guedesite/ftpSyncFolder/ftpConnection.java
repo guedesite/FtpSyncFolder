@@ -134,8 +134,14 @@ public class ftpConnection {
 					sendFile();
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				e.printStackTrace();
+				sendFile();
 			}
 		}
 		
